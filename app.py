@@ -17,6 +17,11 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
+def check_supabase_clients():
+    if supabase_auth is None or supabase is None:
+        print("Supabase clients not initialized")
+        return jsonify({"success": False, "message": "Authentication service unavailable"}), 500
+    return True
 
 # Initialize Supabase client
 try:
@@ -28,30 +33,10 @@ try:
     print(f"Service key available: {'Yes' if service_key else 'No'}")
     print(f"Anon key available: {'Yes' if anon_key else 'No'}")
 
-    # Debug print the environment
-    print("Environment variables:")
-    print(f"SUPABASE_URL: {supabase_url}")
-    print(f"SUPABASE_KEY length: {len(service_key) if service_key else 0}")
-    print(f"ADMIN_KEY length: {len(anon_key) if anon_key else 0}")
-
     # Initialize both clients - one with service role for DB operations
     # and one with anon role for auth operations
-    try:
-        print("Attempting to create service client...")
-        supabase = create_client(supabase_url, service_key)
-        print("Service client created successfully")
-    except Exception as service_error:
-        print(f"Error creating service client: {str(service_error)}")
-        raise
-
-    try:
-        print("Attempting to create auth client...")
-        supabase_auth = create_client(supabase_url, anon_key)
-        print("Auth client created successfully")
-    except Exception as auth_error:
-        print(f"Error creating auth client: {str(auth_error)}")
-        raise
-    
+    supabase = create_client(supabase_url, service_key)
+    supabase_auth = create_client(supabase_url, anon_key)
     
     # Store SMTP settings for reference
     smtp_host = os.getenv("SMTP_HOST")
