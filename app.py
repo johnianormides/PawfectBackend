@@ -30,8 +30,8 @@ try:
 
     # Initialize both clients - one with service role for DB operations
     # and one with anon role for auth operations
-    supabase = create_client(supabase_url, service_key, options={"auth": {"autoRefreshToken": True}})
-    supabase_auth = create_client(supabase_url, anon_key, options={"auth": {"autoRefreshToken": True}})
+    supabase = create_client(supabase_url, service_key)
+    supabase_auth = create_client(supabase_url, anon_key)
     
     # Store SMTP settings for reference
     smtp_host = os.getenv("SMTP_HOST")
