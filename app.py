@@ -35,50 +35,8 @@ try:
 
     # Initialize both clients - one with service role for DB operations
     # and one with anon role for auth operations
-    try:
-        print("Attempting to create service client...")
-        # Create client with explicit options and no proxy
-        supabase = create_client(
-            supabase_url=supabase_url,
-            supabase_key=service_key,
-            options={
-                'autoRefreshToken': True,
-                'persistSession': True,
-                'headers': {
-                    'X-Client-Info': 'supabase-py/2.3.1'
-                }
-            }
-        )
-        print("Service client created successfully")
-    except Exception as service_error:
-        print(f"Error creating service client: {str(service_error)}")
-        print(f"Error type: {type(service_error)}")
-        import traceback
-        print(f"Traceback: {traceback.format_exc()}")
-        raise
-
-    try:
-        print("Attempting to create auth client...")
-        # Create auth client with explicit options and no proxy
-        supabase_auth = create_client(
-            supabase_url=supabase_url,
-            supabase_key=anon_key,
-            options={
-                'autoRefreshToken': True,
-                'persistSession': True,
-                'headers': {
-                    'X-Client-Info': 'supabase-py/2.3.1'
-                }
-            }
-        )
-        print("Auth client created successfully")
-    except Exception as auth_error:
-        print(f"Error creating auth client: {str(auth_error)}")
-        print(f"Error type: {type(auth_error)}")
-        import traceback
-        print(f"Traceback: {traceback.format_exc()}")
-        raise
-    
+    supabase = create_client(supabase_url, service_key)
+    supabase_auth = create_client(supabase_url, anon_key)
     
     # Store SMTP settings for reference
     smtp_host = os.getenv("SMTP_HOST")
