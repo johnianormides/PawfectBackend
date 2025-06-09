@@ -30,8 +30,10 @@ try:
     # Initialize both clients - one with service role for DB operations
     # and one with anon role for auth operations
     supabase = create_client(supabase_url, service_key)
+    print("supabase")
     print(supabase)
     supabase_auth = create_client(supabase_url, anon_key)
+    print("supabase_auth")
     print(supabase_auth)
     
     # Store SMTP settings for reference
