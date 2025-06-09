@@ -3,12 +3,14 @@ from flask_cors import CORS
 import os
 from dotenv import load_dotenv
 from supabase import create_client
+
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
 import secrets
 import requests
 from datetime import datetime, timezone, timedelta
 from mailjet_rest import Client as MailjetClient
+
 
 # Load environment variables
 load_dotenv()
@@ -1913,5 +1915,5 @@ def get_adoption_history():
         return format_response(None, f"Failed to fetch adoption history: {str(e)}")
 
 # Run the app
-# if __name__ == '__main__':
-#     app.run(debug=True, host='0.0.0.0', port=int(os.getenv('PORT', 5000)))
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=int(os.getenv('PORT', 5000)))
