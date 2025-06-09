@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, abort, g, redirect, url_for
 from flask_cors import CORS
 import os
 from dotenv import load_dotenv
-from supabase import create_client, Client
+from supabase import create_client
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
 import secrets
@@ -16,12 +16,6 @@ load_dotenv()
 # Initialize Flask app
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
-
-def check_supabase_clients():
-    if supabase_auth is None or supabase is None:
-        print("Supabase clients not initialized")
-        return jsonify({"success": False, "message": "Authentication service unavailable"}), 500
-    return True
 
 # Initialize Supabase client
 try:
