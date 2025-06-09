@@ -17,11 +17,6 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
-def check_supabase_clients():
-    if supabase_auth is None or supabase is None:
-        print("Supabase clients not initialized")
-        return jsonify({"success": False, "message": "Authentication service unavailable"}), 500
-    return True
 
 # Initialize Supabase client
 try:
@@ -35,12 +30,9 @@ try:
 
     # Initialize both clients - one with service role for DB operations
     # and one with anon role for auth operations
-    supabase = create_client(supabase_url, service_key)
-    supabase_auth = create_client(supabase_url, anon_key)
+    supabase = create_client(supabase_url, service_key, options={"auth": {"autoRefreshToken": True}})
+    supabase_auth = create_client(supabase_url, anon_key, options={"auth": {"autoRefreshToken": True}})
     
-    check_supabase_clients();
-    
-
     # Store SMTP settings for reference
     smtp_host = os.getenv("SMTP_HOST")
     smtp_port = os.getenv("SMTP_PORT")
