@@ -33,22 +33,21 @@ try:
     print(f"Service key available: {'Yes' if service_key else 'No'}")
     print(f"Anon key available: {'Yes' if anon_key else 'No'}")
 
-    # Check for any proxy-related environment variables
-    proxy_vars = [var for var in os.environ if 'proxy' in var.lower()]
-    if proxy_vars:
-        print("Warning: Found proxy-related environment variables:", proxy_vars)
-        # Temporarily unset proxy variables
-        for var in proxy_vars:
-            os.environ.pop(var, None)
-
     # Initialize both clients - one with service role for DB operations
     # and one with anon role for auth operations
     try:
         print("Attempting to create service client...")
-        # Create client with minimal configuration
+        # Create client with explicit options and no proxy
         supabase = create_client(
             supabase_url=supabase_url,
-            supabase_key=service_key
+            supabase_key=service_key,
+            options={
+                'autoRefreshToken': True,
+                'persistSession': True,
+                'headers': {
+                    'X-Client-Info': 'supabase-py/2.3.1'
+                }
+            }
         )
         print("Service client created successfully")
     except Exception as service_error:
@@ -60,10 +59,17 @@ try:
 
     try:
         print("Attempting to create auth client...")
-        # Create auth client with minimal configuration
+        # Create auth client with explicit options and no proxy
         supabase_auth = create_client(
             supabase_url=supabase_url,
-            supabase_key=anon_key
+            supabase_key=anon_key,
+            options={
+                'autoRefreshToken': True,
+                'persistSession': True,
+                'headers': {
+                    'X-Client-Info': 'supabase-py/2.3.1'
+                }
+            }
         )
         print("Auth client created successfully")
     except Exception as auth_error:
