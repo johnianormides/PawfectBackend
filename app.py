@@ -33,10 +33,46 @@ try:
     print(f"Service key available: {'Yes' if service_key else 'No'}")
     print(f"Anon key available: {'Yes' if anon_key else 'No'}")
 
+    # Check for any proxy-related environment variables
+    proxy_vars = [var for var in os.environ if 'proxy' in var.lower()]
+    if proxy_vars:
+        print("Warning: Found proxy-related environment variables:", proxy_vars)
+        # Temporarily unset proxy variables
+        for var in proxy_vars:
+            os.environ.pop(var, None)
+
     # Initialize both clients - one with service role for DB operations
     # and one with anon role for auth operations
-    supabase = create_client(supabase_url, service_key)
-    supabase_auth = create_client(supabase_url, anon_key)
+    try:
+        print("Attempting to create service client...")
+        # Create client with minimal configuration
+        supabase = create_client(
+            supabase_url=supabase_url,
+            supabase_key=service_key
+        )
+        print("Service client created successfully")
+    except Exception as service_error:
+        print(f"Error creating service client: {str(service_error)}")
+        print(f"Error type: {type(service_error)}")
+        import traceback
+        print(f"Traceback: {traceback.format_exc()}")
+        raise
+
+    try:
+        print("Attempting to create auth client...")
+        # Create auth client with minimal configuration
+        supabase_auth = create_client(
+            supabase_url=supabase_url,
+            supabase_key=anon_key
+        )
+        print("Auth client created successfully")
+    except Exception as auth_error:
+        print(f"Error creating auth client: {str(auth_error)}")
+        print(f"Error type: {type(auth_error)}")
+        import traceback
+        print(f"Traceback: {traceback.format_exc()}")
+        raise
+    
     
     # Store SMTP settings for reference
     smtp_host = os.getenv("SMTP_HOST")
