@@ -1909,5 +1909,5 @@ def get_adoption_history():
         return format_response(None, f"Failed to fetch adoption history: {str(e)}")
 
 # Run the app
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=int(os.getenv('PORT', 5000)))
+# if __name__ == '__main__':
+#     app.run(debug=True, host='0.0.0.0', port=int(os.getenv('PORT', 5000)))
