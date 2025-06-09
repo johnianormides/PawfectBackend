@@ -37,6 +37,15 @@ try:
     supabase_auth = create_client(supabase_url, anon_key)
     print("supabase_auth")
     print(supabase_auth)
+
+    if not supabase and not supabase_auth:
+        print("BOTH NOT CONNECTION")
+
+    if not supabase:
+        print("SUPABASE NOT")
+
+    if not supabase_auth:
+        print("SUPABASE AUTH NOT")
     
     # Store SMTP settings for reference
     smtp_host = os.getenv("SMTP_HOST")
